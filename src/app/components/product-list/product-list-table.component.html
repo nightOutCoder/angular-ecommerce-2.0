@@ -1,0 +1,18 @@
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Units in Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor = "let data of products">
+            <td class="align-middle"><img src={{data.imageUrl}} height="50"></td>
+            <td class="align-middle">{{ data.name}}</td>
+            <td class="align-middle">{{ data.unitPrice}}</td>
+            <td class="align-middle">{{ data.unitsInStock}}</td>
+        </tr>
+    </tbody>
+</table>
