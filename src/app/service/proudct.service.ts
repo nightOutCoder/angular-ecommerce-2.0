@@ -14,8 +14,10 @@ export class ProudctService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProudctList(): Observable<Product[]>{
-    return this.httpClient.get<GetResponse>(this.baseUrl).pipe(map(response => response._embedded.products))
+  getProudctList(theCategoryId: number): Observable<Product[]>{
+    const searchURL = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
+    // Need to build URL based on category id
+    return this.httpClient.get<GetResponse>(searchURL).pipe(map(response => response._embedded.products))
   }
 }
 
