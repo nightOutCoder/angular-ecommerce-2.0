@@ -19,12 +19,20 @@ export class ProudctService {
 
   getProudctList(theCategoryId: number): Observable<Product[]>{
     const searchURL = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
-    // Need to build URL based on category id
-    return this.httpClient.get<GetResponseProduct>(searchURL).pipe(map(response => response._embedded.products))
+    return this.getProducts(searchURL);
   }
 
   getProductCategories(): Observable<ProductCategory[]>{
     return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(map(response => response._embedded.productCategory))
+  }
+
+  searchProducts(theKeyword: string): Observable<Product[]>{
+    const searchURL = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
+    return this.getProducts(searchURL);
+  }
+
+  private getProducts(searchURL: string): Observable<Product[]> {
+    return this.httpClient.get<GetResponseProduct>(searchURL).pipe(map(response => response._embedded.products));
   }
 }
 

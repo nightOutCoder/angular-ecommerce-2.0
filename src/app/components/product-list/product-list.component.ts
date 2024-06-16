@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductListComponent implements OnInit {
   currentCategoryId: number = 1;
+  serachMode: boolean = false;
 
   products: Product[] = [];
   constructor(private proudctService: ProudctService, private route: ActivatedRoute){
@@ -22,7 +23,16 @@ export class ProductListComponent implements OnInit {
   }
 
   listProudcts(){
+    // check if 'keyword' parameter is available
+    const serachMode: boolean = this.route.snapshot.paramMap.has('keyword');
+    if(serachMode){
+      this.handleSearchProudcts();
+    } else {
+      this.handleListProudcts();
+    }
+  }
 
+  handleListProudcts(){
     // check if 'id' parameter is available
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
 
@@ -41,4 +51,12 @@ export class ProductListComponent implements OnInit {
     )
   }
 
+  handleSearchProudcts(){
+    const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
+    this.proudctService.searchProducts(theKeyword).subscribe(
+    data => {
+      this.products = data;
+    }  
+    );
+  }
 }
