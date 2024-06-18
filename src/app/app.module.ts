@@ -9,10 +9,12 @@ import { ProudctService } from './service/proudct.service';
 import { Routes, RouterModule } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SerachComponent } from './components/serach/serach.component';
+import { ProductsDetailsComponent } from './components/products-details/products-details.component';
 
 
 const routes : Routes= [
   { path: 'search/:keyword', component: ProductListComponent },
+  { path: 'products/:id', component: ProductsDetailsComponent },
   { path: 'category/:id', component: ProductListComponent },
   { path: 'category', component: ProductListComponent },
   { path: 'products', component: ProductListComponent },
@@ -25,7 +27,8 @@ const routes : Routes= [
     AppComponent,
     ProductListComponent,
     ProductCategoryMenuComponent,
-    SerachComponent
+    SerachComponent,
+    ProductsDetailsComponent
   ],
   imports: [
     RouterModule.forRoot(routes),

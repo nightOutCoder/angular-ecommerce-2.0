@@ -34,6 +34,12 @@ export class ProudctService {
   private getProducts(searchURL: string): Observable<Product[]> {
     return this.httpClient.get<GetResponseProduct>(searchURL).pipe(map(response => response._embedded.products));
   }
+
+  getProduct(theProductId: number): Observable<Product> {
+    // need to build the URL based on the product id
+    const productUrl = `${this.baseUrl}/${theProductId}`;
+    return this.httpClient.get<Product>(productUrl);
+  }
 }
 
 interface GetResponseProduct {
