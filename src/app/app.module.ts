@@ -10,6 +10,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SerachComponent } from './components/serach/serach.component';
 import { ProductsDetailsComponent } from './components/products-details/products-details.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 const routes : Routes= [
@@ -34,7 +35,8 @@ const routes : Routes= [
     RouterModule.forRoot(routes),
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule
   ],
   providers: [ProudctService],
   bootstrap: [AppComponent]

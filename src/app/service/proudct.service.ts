@@ -40,11 +40,25 @@ export class ProudctService {
     const productUrl = `${this.baseUrl}/${theProductId}`;
     return this.httpClient.get<Product>(productUrl);
   }
+
+  getProductistPaginate(thePage: number, 
+                        thePageSize: number, 
+                        theCategoryId: number): Observable<GetResponseProduct>{
+    // need to build the URL based on the product id, page and size
+    const searchURL = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}` + `&page=${thePage}&size=${thePageSize}`;
+    return this.httpClient.get<GetResponseProduct>(searchURL);
+  }
 }
 
 interface GetResponseProduct {
   _embedded: {
     products: Product[];
+  },
+  page: {
+    size : number, // size of the page
+    totalElements : number, // Grand total in database 
+    totalPages : number, // Total pages available
+    number : number // Curent page number
   }
 }
 
