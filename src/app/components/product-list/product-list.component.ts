@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProudctService } from '../../service/proudct.service';
 import { Product } from '../../common/product';
 import { ActivatedRoute } from '@angular/router';
+import { CartItem } from '../../common/cart-item';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -9,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './product-list.component.css'
 })
 export class ProductListComponent implements OnInit {
+
   currentCategoryId: number = 1;
   previousCategoryId: number = 1;
   serachMode: boolean = false;
@@ -20,8 +23,9 @@ export class ProductListComponent implements OnInit {
   thePageSize: number = 5; // try with 5 & 50
   theTotalElements: number = 0;
 
+  previousKeyword: string = '';
 
-  constructor(private proudctService: ProudctService, private route: ActivatedRoute){
+  constructor(private proudctService: ProudctService, private route: ActivatedRoute, private cartService: CartService){
   }
 
   ngOnInit(){
@@ -77,27 +81,54 @@ export class ProductListComponent implements OnInit {
 
     // here we setting -1 to pageNumber becuase in Spring data rest: pages are 0 based but in angular zero based
     this.proudctService.getProductistPaginate(this.thePageNumber-1, this.thePageSize,this.currentCategoryId).subscribe(
-      data => {
-        this.products = data._embedded.products;
-        this.thePageNumber = data.page.number + 1; // pages are 0 based in spring data rest 
-        this.thePageSize = data.page.size;
-        this.theTotalElements = data.page.totalElements;
-      }
-    )
+      this.processResult()
+    );
   }
 
   handleSearchProudcts(){
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
-    this.proudctService.searchProducts(theKeyword).subscribe(
-    data => {
-      this.products = data;
-    }  
-    );
+
+    // if we have a different keyword than previous
+    // then set thePageNumber to 1
+    
+    if(this.previousKeyword != theKeyword){
+      this.thePageNumber = 1;
+    }
+
+    this.previousKeyword = theKeyword;
+    console.log(`keyword=${theKeyword}, thePageNumber=${this.thePageNumber}`);
+
+
+    // this.proudctService.searchProducts(theKeyword).subscribe(
+    // data => {
+    //   this.products = data;
+    // }  
+    // );
+
+
+    this.proudctService.serarchProductPaginate(this.thePageNumber-1, this.thePageSize, this.previousKeyword).subscribe(this.processResult());
   }
 
   updatePageSize(pageSize: string){
     this.thePageSize = +pageSize;
     this.thePageNumber = 1;
     this.listProudcts();
+  }
+
+
+  processResult(){
+    return (data: any) => {
+      this.products = data._embedded.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    };
+  }
+
+  addToCart(theProduct: Product) {
+   console.log(`Product Name :  ${theProduct.name} and price is ${theProduct.unitPrice}`);
+
+   const theCartItem = new CartItem(theProduct);
+   this.cartService.addToCart(theCartItem);
   }
 }

@@ -48,6 +48,14 @@ export class ProudctService {
     const searchURL = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}` + `&page=${thePage}&size=${thePageSize}`;
     return this.httpClient.get<GetResponseProduct>(searchURL);
   }
+
+  serarchProductPaginate(thePage: number, 
+                         thePageSize: number, 
+                        theKeyword: string): Observable<GetResponseProduct>{
+      // need to build the URL based on the product id, page and size
+      const searchURL = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}` + `&page=${thePage}&size=${thePageSize}`;
+      return this.httpClient.get<GetResponseProduct>(searchURL);
+  }
 }
 
 interface GetResponseProduct {
