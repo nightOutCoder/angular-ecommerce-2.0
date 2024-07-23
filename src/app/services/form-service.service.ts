@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,20 +8,34 @@ export class FormServiceService {
 
   constructor() { }
 
-  // getCreditCardMonths(startMonth: number): Observable<number[]> {
+  getCreditCardMonths(startMonth: number): Observable<number[]> {
 
-  //   let data: number[] = [];
+    let data: number[] = [];
 
-  //   // build an array for 
-  //   return of(data);
-  //}
+    // build an array for  Month dropdown list
+    // start at current month and loop until 12th month
+
+    for(let theMonth = startMonth; theMonth <=12; theMonth++){
+      data.push(theMonth);
+    }
+    return of(data);
+  }
 
   
-  // getCreditCardMonths(startMonth: number): Observable<number[]> {
+  getCreditCardYears(): Observable<number[]> {
 
-  //   const data = {};
+    let data: number[] = [];
 
-  //   return of(data);
-  // }
-//}
+    // build an array for Year dropdown list
+    // start at the current year and loop for next 10 years
+
+    const startYear: number = new Date().getFullYear();
+    const endYear: number = startYear + 10;
+
+    for(let theYear = startYear; theYear <= endYear; theYear++){
+      data.push(theYear);
+    }
+    
+    return of(data);
+  }
 }
