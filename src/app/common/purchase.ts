@@ -5,8 +5,8 @@ import { OrderItem } from "./order-item";
 
 export class Purchase {
     customer: Customer | undefined;
-    shippingAddress: Address | undefined;
-    billingAddress: Address | undefined;
+    shippingAddress!: Address;
+    billingAddress!: Address;
     order: Order | undefined;
-    ordetItems: OrderItem[] | undefined;
+    orderItems: OrderItem[] | undefined;
 }
