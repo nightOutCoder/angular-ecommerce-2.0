@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ProudctService } from './service/proudct.service';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Router } from '@angular/router';
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SerachComponent } from './components/serach/serach.component';
 import { ProductsDetailsComponent } from './components/products-details/products-details.component';
@@ -18,15 +18,26 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login/login.component';
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 
-import { OktaAuthModule, OktaCallbackComponent, OKTA_CONFIG } from '@okta/okta-angular';
+import { OktaAuthModule, OktaCallbackComponent, OKTA_CONFIG, OktaAuthGuard } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js'
 import myAppConfig from './config/my-app-config';
+import { MembersPageComponent } from './components/members-page/members-page.component';
 
 const oktaConfig = myAppConfig.oidc;
 const oktaAuth = new OktaAuth(oktaConfig);
 
+function sendToLoginPage(oktaAuth: OktaAuth, injector: Injector){
+// Use Injector to access any service available within your application
+const router = injector.get(Router);
+
+// Redirect the user to your custom login page
+router.navigate(['/login']);  
+}
 
 const routes : Routes= [
+  { path: 'members', component: MembersPageComponent, canActivate: [OktaAuthGuard], 
+    data: { onAuthRequired: sendToLoginPage } 
+  },
   { path: 'login/callback', component: OktaCallbackComponent }, // Once the user is authenticated, they are redirected to your app
   { path: 'login', component: LoginComponent },
   { path: 'checkout', component: CheckoutComponent },
@@ -51,7 +62,8 @@ const routes : Routes= [
     CartDetailsComponent,
     CheckoutComponent,
     LoginComponent,
-    LoginStatusComponent
+    LoginStatusComponent,
+    MembersPageComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
