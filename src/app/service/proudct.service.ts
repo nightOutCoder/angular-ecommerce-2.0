@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { Product } from '../common/product';
 import { ProductCategory } from '../common/product-category';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProudctService {
 
-  private baseUrl = 'http://localhost:8080/api/products'; //it return only records
+  private baseUrl = environment.ecommerce + '/products'; //it return only records
   // private baseUrl = 'http://localhost:8080/api/products?size=100'; //it return 100 records
 
-  private categoryUrl = 'http://localhost:8080/api/product_category';
+  private categoryUrl = environment.ecommerce + '/product_category';
   
 
   constructor(private httpClient: HttpClient) { }
@@ -46,6 +47,7 @@ export class ProudctService {
                         theCategoryId: number): Observable<GetResponseProduct>{
     // need to build the URL based on the product id, page and size
     const searchURL = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}` + `&page=${thePage}&size=${thePageSize}`;
+    console.log('123->', searchURL);
     return this.httpClient.get<GetResponseProduct>(searchURL);
   }
 
