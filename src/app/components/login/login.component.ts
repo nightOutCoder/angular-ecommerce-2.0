@@ -15,12 +15,14 @@ export class LoginComponent implements OnInit {
   oktaSignin: any;
 
   constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {
+    console.log('LoginComponent-1');
 
     this.oktaSignin = new OktaSignIn({
-      logo: 'assets/images/logo.png',
+      logo: 'assets/images/placeholder.ico',
       baseUrl: myAppConfig.oidc.issuer.split('/oauth2')[0],
       clientId: myAppConfig.oidc.clientId,
       redirectUri: myAppConfig.oidc.redirectUri,
+      useClassicEngine: true,
       authParams: {
         pkce: true,
         issuer: myAppConfig.oidc.issuer,
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit {
     });
    }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.oktaSignin.remove();
 
     this.oktaSignin.renderEl({
